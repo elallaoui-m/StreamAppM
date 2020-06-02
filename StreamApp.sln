@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamApp", "StreamApp.csproj", "{A6BA93B3-7C8B-4EF0-9550-3D2815CA5451}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6BA93B3-7C8B-4EF0-9550-3D2815CA5451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6BA93B3-7C8B-4EF0-9550-3D2815CA5451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6BA93B3-7C8B-4EF0-9550-3D2815CA5451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6BA93B3-7C8B-4EF0-9550-3D2815CA5451}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5D7AC7A1-19CF-4F0C-BCD8-4A73B4B7021C}
+	EndGlobalSection
+EndGlobal

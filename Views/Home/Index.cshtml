@@ -31,3 +31,38 @@
         </div>
     </div>
 </div>
+
+<script>
+        $(function () {
+
+                                        
+            $("#loginButton").on("click", function () {
+                
+                var username = $("#username").val();
+
+                var isValid = true;
+                if (!username) {
+                   // Notification.GeneralNotify("@Translation.userVide", "danger");
+                    isValid = false;
+                } else if (username.length < 4) {
+                    //Notification.GeneralNotify("@Translation.userMoins", "danger");
+                    isValid = false;
+                }
+
+
+                if (isValid) {
+                    $(this).attr("disabled", true);
+
+                     $.post("/admin/Login", { username }, function (data) {
+                         if (data.success) {
+                             window.location.href = "/home/room";
+                        } else {
+                             $("#loginButton").attr("disabled", false);
+                        }
+                    })
+                }
+
+                return false;
+            })
+        })
+</script>

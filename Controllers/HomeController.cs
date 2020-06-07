@@ -1,31 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using StreamApp.Models;
+using StreamApp.utils;
+using System.Diagnostics;
 
 namespace StreamApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        Producer producer;
+        Consumer consumer;
+
+        public HomeController(Producer _producer,Consumer _consumer)
         {
-            _logger = logger;
+            producer = _producer;
+            consumer = _consumer;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
+            if (isLogged())
+            {
+                return Redirect("home/room");  
+            }
+
             return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult Index(string username)
+        {
+            CookieOptions option = new CookieOptions();
+            option.HttpOnly = true;
+            Response.Cookies.Append("username", username, option);
+
+            return Redirect("/home/room");
         }
 
         public IActionResult Room()
         {
-            return View();
+            if (isLogged())
+            {
+                 return View();
+            }
+
+            return Redirect("./");
+           
+        }
+
+        private bool isLogged()
+        {
+            return this.ControllerContext.HttpContext.Request.Cookies["username"] != null;
+        }
+
+        [HttpPost]
+        public JsonResult SendMessage(string message)
+        {
+            try
+            {
+                producer.sendMessage(message);
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return Json(new { success = false});
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

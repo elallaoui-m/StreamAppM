@@ -108,9 +108,9 @@
                     </div>
                     <div class="card-footer">
                         <div class="input-group">
-                            <input name="" class="form-control type_msg" placeholder="Type your message..." />
+                            <input name="" class="form-control type_msg" id="message" placeholder="Type your message..." />
                             <div class="input-group-append">
-                                <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                                <span class="input-group-text send_btn" id="sendButton"><i class="fas fa-location-arrow"></i></span>
                             </div>
                         </div>
                     </div>
@@ -118,3 +118,34 @@
             </div>
         </div>
     </div>
+
+
+<script>
+   
+    $(function () {
+
+        // need function to load sockets
+
+
+            $("#sendButton").on("click", function () {
+
+                var message = $("#message").val();
+
+                var isValid = true;
+                if (!message) {
+                    isValid = false;
+                } 
+
+                if (isValid) {
+
+                     $.post("/admin/Login", { username }, function (data) {
+                         if (!data.success) {
+                             // small div says error to send msg
+                        } 
+                    })
+                }
+
+                return false;
+            })
+        })
+</script>

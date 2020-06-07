@@ -8,7 +8,7 @@
         <div class="col-md-10 col-xl-9 col-sm-12 chat">
             <a class="btn btn-danger w-100" asp-area="" asp-controller="Home" asp-action="Logout">Leave Room</a><br /><br />
             <div class="card pt-4">
-                <div class="card-body msg_card_body">
+                <div class="card-body msg_card_body" id="chatBox">
                     <div class="d-flex justify-content-start mb-4">
                         <div class="msg_cotainer">
                             Hi, how are you samim?
@@ -112,7 +112,9 @@
                     <div class="input-group">
                         <input name="" class="form-control type_msg" id="message" placeholder="Type your message..." />
                         <div class="input-group-append">
-                            <span class="input-group-text send_btn" id="sendButton"><i class="fas fa-location-arrow"></i></span>
+                            <button style="border:none">
+                                <span class="input-group-text send_btn" id="sendButton"><i class="fas fa-location-arrow"></i></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -131,7 +133,7 @@
         $("#sendButton").on("click", function () {
 
             var message = $("#message").val();
-
+            var time = new Date();
             var isValid = true;
             if (!message) {
                 isValid = false;
@@ -141,11 +143,33 @@
 
                 $.post("/home/room", { message }, function (data) {
                     if (!data.success) {
-                        // small div says error to send msg
-                        console.log("error to send msg")
+                        var errorContainer = document.createElement("div");
+                        errorContainer.className = " alert alert-danger";
+                        errorContainer.innerHTML = "&#9888;Error sending the message"
+                         document.getElementById("chatBox").appendChild(errorContainer);
+                        
 
                     } else {
-                        console.log("error to msg server")
+                        var container = document.createElement("div");
+                        container.className = "d-flex justify-content-end mb-4";
+                        //The message
+                        var messageContainer = document.createElement("div");
+                        messageContainer.className = "msg_cotainer_send";
+                        messageContainer.innerHTML = message;
+                        container.appendChild(messageContainer);
+                        document.getElementById("chatBox").appendChild(container);
+                        //The sender of the msg
+
+                        var senderContainer = document.createElement("span");
+                        senderContainer.className="msg_time";
+
+                        var sender = document.createElement("b");
+                        sender.innerHTML = "Me";
+
+                        senderContainer.appendChild(sender);
+                        senderContainer.innerHTML = "&nbsp;&nbsp;" + time.toLocaleString(); 
+                        messageContainer.appendChild(senderContainer);
+                        $("#message").val('');
                     }
                 })
             }
@@ -153,4 +177,5 @@
             return false;
         })
     })
+ 
 </script>

@@ -15,7 +15,7 @@
                 <div class="row justify-content-center mt-5">
                     <div class="col-md-10 col-lg-8">
                         <div class="input-group mb-5">
-                            <input name="username" id="username" class="form-control type_msg home" placeholder="Username" />
+                            <input name="username" id="username" class="form-control type_msg home" placeholder="Username" /><br>
                            <span id="error" class="w-100 text-danger"></span>
                         </div>
                         <div class="input-group mb-5">
@@ -31,8 +31,7 @@
 
 <script>
         $(function () {
-
-                                        
+    
             $("#loginButton").on("click", function () {
                 console.log("enter clicked");
                 var username = $("#username").val();
@@ -50,12 +49,14 @@
 
                     $(this).attr("disabled", true);
                     $.post("/home/index", { username }, function (data) {
+
                         if (data.success) {
                             window.location.href = "/home/room";
                         } else {
                             $("#loginButton").attr("disabled", false);
-                            $("#error").text("Server Error");
+                            $("#error").text("Server In Error");
                         }
+
                     })
 
                 } else {

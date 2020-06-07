@@ -25,14 +25,21 @@ namespace StreamApp.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("username");
+            return Redirect("/");
+        }
+
         [HttpPost]
-        public IActionResult Index(string username)
+        public JsonResult Index(string username)
         {
             CookieOptions option = new CookieOptions();
             option.HttpOnly = true;
             Response.Cookies.Append("username", username, option);
 
-            return Redirect("/home/room");
+            return Json(new { success = true });
         }
 
         public IActionResult Room()

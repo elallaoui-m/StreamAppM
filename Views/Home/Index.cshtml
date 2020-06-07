@@ -1,4 +1,5 @@
 ﻿@{
+    Layout
     ViewData["Title"] = "Home page";
 }
 
@@ -42,22 +43,22 @@
 
                 var isValid = true;
                 if (!username) {
-                   // Notification.GeneralNotify("@Translation.userVide", "danger");
+                   // must create a div to show error
                     isValid = false;
                 } else if (username.length < 4) {
-                    //Notification.GeneralNotify("@Translation.userMoins", "danger");
+                    // must create a div to show error
                     isValid = false;
                 }
 
 
                 if (isValid) {
-                    $(this).attr("disabled", true);
-
+                     $(this).attr("disabled", true);
                      $.post("/admin/Login", { username }, function (data) {
                          if (data.success) {
                              window.location.href = "/home/room";
                         } else {
                              $("#loginButton").attr("disabled", false);
+                             console.log("error send msg");
                         }
                     })
                 }

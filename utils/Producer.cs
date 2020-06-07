@@ -6,7 +6,7 @@ namespace StreamApp.utils
     public class Producer
     {
         public string BootstrapServers = "localhost:9092";
-        public string Topic = "test-topic";
+        public string Topic = "NetCoreStreamTest";
 
         public async void sendMessage(string message)
         {

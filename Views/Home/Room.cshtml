@@ -126,7 +126,6 @@
 
         // need function to load sockets
 
-
             $("#sendButton").on("click", function () {
 
                 var message = $("#message").val();
@@ -141,7 +140,11 @@
                      $.post("/admin/Login", { username }, function (data) {
                          if (!data.success) {
                              // small div says error to send msg
-                        } 
+                             console.log("error to send msg")
+
+                         } else {
+                             console.log("error to msg server")
+                         }
                     })
                 }
 

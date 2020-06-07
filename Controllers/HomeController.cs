@@ -9,14 +9,9 @@ namespace StreamApp.Controllers
     public class HomeController : Controller
     {
 
-        Producer producer;
-        Consumer consumer;
+        Producer producer= new Producer();
+        Consumer consumer = new Consumer();
 
-        public HomeController(Producer _producer,Consumer _consumer)
-        {
-            producer = _producer;
-            consumer = _consumer;
-        }
 
         [HttpGet]
         public IActionResult Index()

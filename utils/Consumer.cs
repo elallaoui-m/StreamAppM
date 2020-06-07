@@ -7,9 +7,9 @@ namespace StreamApp.utils
 {
     public class Consumer
     {
-        public string Topic = "test-topic";
+        public string Topic = "NetCoreStreamTest";
         public string BootstrapServers = "localhost:9092";
-        public string GroupId = "test-consumer-group";
+        public string GroupId = "NetCoreStreamTest";
 
         public void retriveMessages()
         {

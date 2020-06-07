@@ -1,17 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Confluent.Kafka;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using StreamApp.Models;
 using StreamApp.utils;
+using System.Configuration;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace StreamApp.Controllers
 {
     public class HomeController : Controller
     {
 
-        Producer producer= new Producer();
-        Consumer consumer = new Consumer();
 
+        private readonly ProducerConfig config;
+        private readonly IConfiguration configuration;
+
+        public HomeController(ProducerConfig config, IConfiguration configuration)
+        {
+            this.config = config;
+            this.configuration = configuration;
+        }
 
         [HttpGet]
         public IActionResult Index()
@@ -59,11 +69,13 @@ namespace StreamApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult SendMessage(string message)
+        public async Task<JsonResult> SendMessageAsync(string message)
         {
             try
             {
-                producer.sendMessage(message);
+                var topic = configuration["topic"];
+                var producer = new ProducerWrapper(this.config, topic);
+                await producer.writeMessage(message);
                 return Json(new { success = true });
             }
             catch

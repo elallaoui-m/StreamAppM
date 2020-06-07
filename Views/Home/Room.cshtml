@@ -139,7 +139,7 @@
 
             if (isValid) {
 
-                $.post("/home/room", { message }, function (data) {
+                $.post("/home/SendMessage", { message }, function (data) {
                     if (!data.success) {
                         // small div says error to send msg
                         console.log("error to send msg")

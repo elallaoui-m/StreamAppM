@@ -1,5 +1,5 @@
 ﻿@{
-    Layout
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Home page";
 }
 
@@ -14,16 +14,12 @@
                 </div>
                 <div class="row justify-content-center mt-5">
                     <div class="col-md-10 col-lg-8">
-                        <div class="input-group">
-                            <input name="username" class="form-control type_msg home" placeholder="Username" /><br /><br /><br />
-
-                        </div>
-                        <div class="input-group">
-                            <input name="roomId" class="form-control type_msg home" placeholder="Room ID" /><br /><br /><br /><br />
-
+                        <div class="input-group mb-5">
+                            <input name="username" id="username" class="form-control type_msg home" placeholder="Username" />
+                           <span id="error" class="w-100 text-danger"></span>
                         </div>
                         <div class="input-group mb-5">
-                            <button type="submit" class="btn btn-primary w-100">Join Room</button>
+                            <button type="submit" id="loginButton" class="btn btn-primary w-100">Join Room</button>
                         </div>
                     </div>
                 </div>
@@ -38,7 +34,7 @@
 
                                         
             $("#loginButton").on("click", function () {
-                
+                console.log("enter clicked");
                 var username = $("#username").val();
 
                 var isValid = true;
@@ -50,17 +46,20 @@
                     isValid = false;
                 }
 
-
                 if (isValid) {
-                     $(this).attr("disabled", true);
-                     $.post("/admin/Login", { username }, function (data) {
-                         if (data.success) {
-                             window.location.href = "/home/room";
+
+                    $(this).attr("disabled", true);
+                    $.post("/home/index", { username }, function (data) {
+                        if (data.success) {
+                            window.location.href = "/home/room";
                         } else {
-                             $("#loginButton").attr("disabled", false);
-                             console.log("error send msg");
+                            $("#loginButton").attr("disabled", false);
+                            $("#error").text("Server Error");
                         }
                     })
+
+                } else {
+                   $("#error").text("Please provide a username");
                 }
 
                 return false;

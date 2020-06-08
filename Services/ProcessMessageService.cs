@@ -25,18 +25,17 @@ namespace StreamApp.Services
 
         private readonly ConsumerConfig consumerConfig;
         private readonly IConfiguration configuration;
-
-        private WebSocket socket;
-        TaskCompletionSource<object> socketFinishedTcs;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
 
         public ProcessMessageService(ConsumerConfig consumerConfig,
-            IConfiguration configuration)
+            IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this.consumerConfig = consumerConfig;
             this.configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
 
@@ -52,15 +51,9 @@ namespace StreamApp.Services
                 try
                 {
                     string  chatMessage = consumerHelper.readMessage(); 
-                    ChatMessage message = JsonConvert.DeserializeObject<ChatMessage>(chatMessage);
+                    //ChatMessage message = JsonConvert.DeserializeObject<ChatMessage>(chatMessage);
                     var encoded = Encoding.UTF8.GetBytes(chatMessage);
-
-                    //var buffer = new byte[1024 * 4];
-                    //WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    //await socket.SendAsync(new ArraySegment<byte>(encoded, 0,encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                    //socketFinishedTcs.TrySetResult(result);
-
-                    Debug.WriteLine(chatMessage);
+                    await SendSocketMsgToClient(chatMessage);
                 }
                 catch (Exception e)
                 {
@@ -75,9 +68,12 @@ namespace StreamApp.Services
 
         }
 
-        internal static void AddSocket(WebSocket socket, TaskCompletionSource<object> socketFinishedTcs)
+        private async Task SendSocketMsgToClient(string msg)
         {
-            //
+            var encoded = Encoding.UTF8.GetBytes(msg);
+            WebSocket webSocket = await _httpContextAccessor.HttpContext.WebSockets.AcceptWebSocketAsync();
+            await webSocket.SendAsync(new ArraySegment<byte>(encoded, 0, encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
         }
+
     }
 }

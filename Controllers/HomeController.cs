@@ -35,13 +35,6 @@ namespace StreamApp.Controllers
 
         }
 
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            Response.Cookies.Delete("username");
-            return Redirect("/");
-        }
-
         [HttpPost]
         public JsonResult Index(string username)
         {
@@ -52,6 +45,15 @@ namespace StreamApp.Controllers
             return Json(new { success = true });
         }
 
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("username");
+            return Redirect("/");
+        }
+
+       
+        [HttpGet]
         public IActionResult Room()
         {
             if (isLogged())
@@ -62,6 +64,7 @@ namespace StreamApp.Controllers
             return Redirect("./");
            
         }
+
 
         private bool isLogged()
         {

@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StreamApp.Services;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace StreamApp
 {
@@ -25,9 +20,8 @@ namespace StreamApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-
-            services.AddSingleton<IHostedService, ProcessMessageService>();
+            services.AddControllersWithViews().AddNewtonsoftJson();
+            //services.AddControllers()
 
             var producerConfig = new ProducerConfig();
             var consumerConfig = new ConsumerConfig();

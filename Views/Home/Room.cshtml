@@ -133,7 +133,6 @@
         $("#sendButton").on("click", function () {
 
             var message = $("#message").val();
-            var time = new Date();
             var isValid = true;
             if (!message) {
                 isValid = false;
@@ -141,41 +140,35 @@
 
             if (isValid) {
 
-                $.post("/home/SendMessage", { message }, function (data) {
-                    if (!data.success) {
-                        var errorContainer = document.createElement("div");
-                        errorContainer.className = " alert alert-danger";
-                        errorContainer.innerHTML = "&#9888;Error sending the message"
-                         document.getElementById("chatBox").appendChild(errorContainer);
-                        
-
-                    } else {
-                        var container = document.createElement("div");
-                        container.className = "d-flex justify-content-end mb-4";
-                        //The message
-                        var messageContainer = document.createElement("div");
-                        messageContainer.className = "msg_cotainer_send";
-                        messageContainer.innerHTML = message;
-                        container.appendChild(messageContainer);
-                        document.getElementById("chatBox").appendChild(container);
-                        //The sender of the msg
-
-                        var senderContainer = document.createElement("span");
-                        senderContainer.className="msg_time";
-
-                        var sender = document.createElement("b");
-                        sender.innerHTML = "Me";
-
-                        senderContainer.appendChild(sender);
-                        senderContainer.innerHTML = "&nbsp;&nbsp;" + time.toLocaleString(); 
-                        messageContainer.appendChild(senderContainer);
+                $.post("/home/SendMessageAsync",{message},function (data) {
+                    if (data.success) {
+                        $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
                         $("#message").val('');
+                    } else {
+                        console.log("Message Not sent");
                     }
-                })
+                });
+
             }
 
             return false;
         })
     })
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
  
 </script>

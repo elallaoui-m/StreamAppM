@@ -78,6 +78,7 @@ namespace StreamApp.Services
 
                         Debug.WriteLine(chatMessage);
                    
+                    await SendSocketMsgToClient(chatMessage);
                 }
                 catch (Exception e)
                 {
@@ -90,6 +91,13 @@ namespace StreamApp.Services
             }
 
 
+        }
+
+        private async Task SendSocketMsgToClient(string msg)
+        {
+            var encoded = Encoding.UTF8.GetBytes(msg);
+            WebSocket webSocket = await _httpContextAccessor.HttpContext.WebSockets.AcceptWebSocketAsync();
+            await webSocket.SendAsync(new ArraySegment<byte>(encoded, 0, encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
     }

@@ -30,7 +30,6 @@ namespace StreamApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-            //services.AddControllers()
 
             var producerConfig = new ProducerConfig();
             var consumerConfig = new ConsumerConfig();
@@ -40,6 +39,8 @@ namespace StreamApp
             services.AddSingleton<ProducerConfig>(producerConfig);
             services.AddSingleton<ConsumerConfig>(consumerConfig);
 
+
+            // to access context
             services.AddHttpContextAccessor();
 
         }

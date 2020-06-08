@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace StreamApp.Services
     public class ProcessMessageServiceHostedService : BackgroundService
     {
         public IServiceProvider Services { get; }
+        public HttpContext Context { get; }
 
         public ProcessMessageServiceHostedService(IServiceProvider services)
         {
@@ -17,7 +20,7 @@ namespace StreamApp.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await DoWork(stoppingToken);
+             await DoWork(stoppingToken);
         }
 
         private async Task DoWork(CancellationToken stoppingToken)

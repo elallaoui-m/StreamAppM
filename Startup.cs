@@ -1,10 +1,19 @@
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Newtonsoft.Json;
+using StreamApp.Models;
+using StreamApp.Services;
+using System;
+using System.Diagnostics;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StreamApp
 {
@@ -30,6 +39,7 @@ namespace StreamApp
 
             services.AddSingleton<ProducerConfig>(producerConfig);
             services.AddSingleton<ConsumerConfig>(consumerConfig);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,12 +62,49 @@ namespace StreamApp
 
             app.UseAuthorization();
 
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(30),
+                ReceiveBufferSize = 4 * 1024
+            };
+
+            app.UseWebSockets(webSocketOptions);
+
+            app.Map("/ws", builder =>
+            {
+                builder.Use(async (context, next) =>
+                {
+                    var socket = await context.WebSockets.AcceptWebSocketAsync();
+                    var socketFinishedTcs = new TaskCompletionSource<object>();
+
+                    ChatMessage msg = new ChatMessage()
+                    {
+                        content = "hello",
+                        sender = "user1",
+
+                    };
+                    var ser = JsonConvert.SerializeObject(msg);
+                    var encoded = Encoding.UTF8.GetBytes(ser);
+
+
+                    await socket.SendAsync(new ArraySegment<byte>(encoded, 0, encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+
+                    // BackgroundSocketProcessor.AddSocket(socket, socketFinishedTcs);
+
+                    await socketFinishedTcs.Task;
+                });
+            });
+
             app.UseEndpoints(endpoints =>
             {
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            
+            
+
         }
     }
 }

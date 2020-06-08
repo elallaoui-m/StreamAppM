@@ -125,6 +125,34 @@
 
 
 <script>
+    (function () {
+        var webSocketProtocol = location.protocol == "https:" ? "wss:" : "ws:";
+        var webSocketURI = webSocketProtocol + "//" + location.host + "/ws";
+        console.log(webSocketURI);
+        socket = new WebSocket(webSocketURI);
+
+        socket.onopen = function () {
+            console.log("Connected.");
+        };
+
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log('Disconnected.');
+            } else {
+                console.log('Connection lost.'); // for example if server processes is killed
+            }
+            console.log('Code: ' + event.code + '. Reason: ' + event.reason);
+        };
+
+        socket.onmessage = function (event) {
+            console.log("Data received: " );
+            console.log(event);
+        };
+
+        socket.onerror = function (error) {
+            console.log("Error: " + error.message);
+        };
+    })()  
 
     $(function () {
 
@@ -140,7 +168,7 @@
 
             if (isValid) {
 
-                $.post("/home/SendMessageAsync",{message},function (data) {
+                $.post("/home/SendMessage",{message},function (data) {
                     if (data.success) {
                         $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
                         $("#message").val('');

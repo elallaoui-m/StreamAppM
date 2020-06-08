@@ -1,5 +1,6 @@
 using Confluent.Kafka;
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace StreamApp.utils
@@ -20,6 +21,7 @@ namespace StreamApp.utils
         }
         public string readMessage(){
             var consumeResult = this._consumer.Consume();
+            Debug.WriteLine("psps");
             return consumeResult?.Message?.Value;
         }
     }

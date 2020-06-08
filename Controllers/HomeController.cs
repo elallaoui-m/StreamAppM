@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using StreamApp.Models;
 using StreamApp.utils;
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -71,6 +73,9 @@ namespace StreamApp.Controllers
             return this.ControllerContext.HttpContext.Request.Cookies["username"] != null;
         }
 
+        
+
+
         [HttpPost]
         public async Task<JsonResult> SendMessageAsync(string message)
         {
@@ -78,7 +83,11 @@ namespace StreamApp.Controllers
             {
                 var topic = configuration["topic"];
                 var producer = new ProducerWrapper(this.config, topic);
-                await producer.writeMessage(message);
+                ChatMessage msg = new ChatMessage();
+                msg.sender = this.ControllerContext.HttpContext.Request.Cookies["username"] ?? "ano";
+                msg.content = message;
+                msg.timestamp = DateTime.Now.ToString("dd-MM-yyyy hh:mm");
+                await producer.writeMessage(JsonConvert.SerializeObject(msg));
                 return Json(new { success = true });
             }
             catch

@@ -40,6 +40,8 @@ namespace StreamApp
             services.AddSingleton<ProducerConfig>(producerConfig);
             services.AddSingleton<ConsumerConfig>(consumerConfig);
 
+            services.AddHttpContextAccessor();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,30 +72,7 @@ namespace StreamApp
 
             app.UseWebSockets(webSocketOptions);
 
-            app.Map("/ws", builder =>
-            {
-                builder.Use(async (context, next) =>
-                {
-                    var socket = await context.WebSockets.AcceptWebSocketAsync();
-                    var socketFinishedTcs = new TaskCompletionSource<object>();
-
-                    ChatMessage msg = new ChatMessage()
-                    {
-                        content = "hello",
-                        sender = "user1",
-
-                    };
-                    var ser = JsonConvert.SerializeObject(msg);
-                    var encoded = Encoding.UTF8.GetBytes(ser);
-
-
-                    await socket.SendAsync(new ArraySegment<byte>(encoded, 0, encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-
-                    // BackgroundSocketProcessor.AddSocket(socket, socketFinishedTcs);
-
-                    await socketFinishedTcs.Task;
-                });
-            });
+            
 
             app.UseEndpoints(endpoints =>
             {
@@ -102,8 +81,10 @@ namespace StreamApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-            
-            
+
+
+           
+
 
         }
     }

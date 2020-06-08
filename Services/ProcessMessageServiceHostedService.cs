@@ -11,7 +11,6 @@ namespace StreamApp.Services
     public class ProcessMessageServiceHostedService : BackgroundService
     {
         public IServiceProvider Services { get; }
-        public HttpContext Context { get; }
 
         public ProcessMessageServiceHostedService(IServiceProvider services)
         {
@@ -30,6 +29,8 @@ namespace StreamApp.Services
                 var scopedProcessingService =
                     scope.ServiceProvider
                         .GetRequiredService<IProcessMessageService>();
+
+
 
                 await scopedProcessingService.DoWork(stoppingToken);
             }

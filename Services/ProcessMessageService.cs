@@ -25,42 +25,59 @@ namespace StreamApp.Services
 
         private readonly ConsumerConfig consumerConfig;
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContextA;
+        private HttpContext httpContext;
 
-        private WebSocket socket;
-        TaskCompletionSource<object> socketFinishedTcs;
+         private WebSocket socket;
+         TaskCompletionSource<object> socketFinishedTcs;
 
 
 
 
         public ProcessMessageService(ConsumerConfig consumerConfig,
+            IHttpContextAccessor httpContextA,
             IConfiguration configuration)
         {
             this.consumerConfig = consumerConfig;
             this.configuration = configuration;
+            this.httpContextA = httpContextA;
+             socketFinishedTcs = new TaskCompletionSource<object>();
+
         }
 
 
         public async Task DoWork(CancellationToken stoppingToken)
         {
-            
+
+            while (httpContext == null)
+            {
+                httpContext = httpContextA.HttpContext;
+            }
+
             while (!stoppingToken.IsCancellationRequested)
             {
-
-                var topic = configuration["topic"];
-                var consumerHelper = new ConsumerWrapper(consumerConfig, topic);
-
+                
+                
                 try
                 {
-                    string  chatMessage = consumerHelper.readMessage(); 
-                    ChatMessage message = JsonConvert.DeserializeObject<ChatMessage>(chatMessage);
-                    var encoded = Encoding.UTF8.GetBytes(chatMessage);
+                   
+                        socket = await httpContext.WebSockets.AcceptWebSocketAsync();
+                        var topic = configuration["topic"];
+                        var consumerHelper = new ConsumerWrapper(consumerConfig, topic);
 
-                    //var buffer = new byte[1024 * 4];
-                    //WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    //await socket.SendAsync(new ArraySegment<byte>(encoded, 0,encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                    //socketFinishedTcs.TrySetResult(result);
+                        string chatMessage = consumerHelper.readMessage();
+                        ChatMessage message = JsonConvert.DeserializeObject<ChatMessage>(chatMessage);
+                        var encoded = Encoding.UTF8.GetBytes(chatMessage);
 
-                    Debug.WriteLine(chatMessage);
+
+                        //var buffer = new byte[1024 * 4];
+                        //WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                        //if(message.sender == )
+                        await socket.SendAsync(new ArraySegment<byte>(encoded, 0, encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                        //socketFinishedTcs.TrySetResult(result);
+
+                        Debug.WriteLine(chatMessage);
+                   
                 }
                 catch (Exception e)
                 {
@@ -68,16 +85,12 @@ namespace StreamApp.Services
                     Debug.WriteLine("There was an error");
                 }
 
-               
+                await socketFinishedTcs.Task;
                 await Task.Delay(10000, stoppingToken);
             }
 
 
         }
 
-        internal static void AddSocket(WebSocket socket, TaskCompletionSource<object> socketFinishedTcs)
-        {
-            //
-        }
     }
 }

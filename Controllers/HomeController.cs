@@ -87,8 +87,14 @@ namespace StreamApp.Controllers
                 msg.sender = this.ControllerContext.HttpContext.Request.Cookies["username"] ?? "ano";
                 msg.content = message;
                 msg.timestamp = DateTime.Now.ToString("dd-MM-yyyy hh:mm");
-                await producer.writeMessage(JsonConvert.SerializeObject(msg));
-                return Json(new { success = true });
+                if(msg!= null)
+                {
+                    await producer.writeMessage(JsonConvert.SerializeObject(msg));
+                    return Json(new { success = true });
+
+                }
+                return Json(new { success = false });
+
             }
             catch
             {

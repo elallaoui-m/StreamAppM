@@ -147,6 +147,10 @@
         socket.onmessage = function (event) {
             console.log("Data received: " );
             console.log(event);
+            let data = JSON.parse(event.data);
+            $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer'>" + data.content + "<span class='msg_time'><b>" + data.sender + "</b>&nbsp;&nbsp;" + data.timestamp+"</span></div></div>")
+
+
         };
 
         socket.onerror = function (error) {
@@ -170,7 +174,7 @@
 
                 $.post("/home/SendMessage",{message},function (data) {
                     if (data.success) {
-                        $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
+                        $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer_start'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
                         $("#message").val('');
                     } else {
                         console.log("Message Not sent");

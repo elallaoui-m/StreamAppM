@@ -21,7 +21,6 @@ namespace StreamApp.utils
         }
         public string readMessage(){
             var consumeResult = this._consumer.Consume();
-            Debug.WriteLine("psps");
             return consumeResult?.Message?.Value;
         }
     }

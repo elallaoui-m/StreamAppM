@@ -2,18 +2,22 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace StreamApp.Services
 {
-    public class ProcessMessageServiceHostedService : BackgroundService
+    public class ProcessMessageServiceHostedService : IProcessMessage
     {
-        public IServiceProvider Services { get; }
+        public TaskCompletionSource<object> taskCompletionSource;
+        public IProcessMessageService processMessage;
+        public WebSocket socket;
 
-        public ProcessMessageServiceHostedService(IServiceProvider services)
+        public ProcessMessageServiceHostedService(IProcessMessageService processMessage)
         {
-            Services = services;
+            this.processMessage = processMessage;
+            
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -23,21 +27,31 @@ namespace StreamApp.Services
 
         private async Task DoWork(CancellationToken stoppingToken)
         {
-            using (var scope = Services.CreateScope())
-            {
-                var scopedProcessingService =
-                    scope.ServiceProvider
-                        .GetRequiredService<IProcessMessageService>();
 
 
 
-                await scopedProcessingService.DoWork(stoppingToken);
-            }
+            processMessage.AddSocket(socket, new TaskCompletionSource<object>());
+            await processMessage.DoWork(stoppingToken);
+            //using (var scope = Services.CreateScope())
+            //{
+            //    var scopedProcessingService =
+            //        scope.ServiceProvider
+            //            .GetRequiredService<IProcessMessageService>();
+
+
+
+            //    await scopedProcessingService.DoWork(stoppingToken);
+            //}
         }
 
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
             await Task.CompletedTask;
+        }
+
+        public override void AddSocket(WebSocket socket)
+        {
+            this.socket = socket;
         }
     }
 }

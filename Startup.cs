@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using StreamApp.middlewares;
 using StreamApp.Models;
 using StreamApp.Services;
 using System;
@@ -30,6 +31,7 @@ namespace StreamApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
+            //services.AddControllers()
 
             var producerConfig = new ProducerConfig();
             var consumerConfig = new ConsumerConfig();
@@ -38,11 +40,6 @@ namespace StreamApp
 
             services.AddSingleton<ProducerConfig>(producerConfig);
             services.AddSingleton<ConsumerConfig>(consumerConfig);
-
-
-            // to access context
-            services.AddHttpContextAccessor();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,8 +69,7 @@ namespace StreamApp
             };
 
             app.UseWebSockets(webSocketOptions);
-
-            
+            app.UseMiddleware<ManageSendingMessages>();
 
             app.UseEndpoints(endpoints =>
             {
@@ -83,8 +79,46 @@ namespace StreamApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            
 
-           
+            //app.UseWebSockets(webSocketOptions);
+
+            //app.Map("/ws", builder =>
+            //{
+            //    builder.Use(async (context, next) =>
+            //    {
+            //        if (context.WebSockets.IsWebSocketRequest)
+            //        {
+            //            //var socket = await context.WebSockets.AcceptWebSocketAsync();
+            //            var socketFinishedTcs = new TaskCompletionSource<object>();
+            //            //ChatMessage msg = new ChatMessage()
+            //            //{
+            //            //    content = "received",
+            //            //    sender = "host"
+            //            //};
+            //            //var str = JsonConvert.SerializeObject(msg);
+            //            //var encoded = Encoding.UTF8.GetBytes(str);
+            //            //await socket.SendAsync(new ArraySegment<byte>(encoded, 0, encoded.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            //            //ProcessMessageService.AddSocket(socket, socketFinishedTcs);
+            //            if(context != null)
+            //            ProcessMessageService.AddContext(context);
+            //            await socketFinishedTcs.Task;
+            //        }
+            //        else
+            //        {
+            //            await next();
+            //        }
+
+            //    });
+            //});
+
+            
+
+
+
+
+
+
 
 
         }

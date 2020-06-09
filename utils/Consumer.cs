@@ -1,6 +1,7 @@
 ﻿
 using Confluent.Kafka;
 using System;
+using System.Net.WebSockets;
 using System.Threading;
 
 namespace StreamApp.utils

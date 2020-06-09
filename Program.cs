@@ -23,8 +23,10 @@ namespace StreamApp
                 }).ConfigureServices(services =>
                 {
                     // for the service worker
-                    services.AddHostedService<ProcessMessageServiceHostedService>();
+                  //  services.AddHostedService<ProcessMessageServiceHostedService>();
                     services.AddScoped<IProcessMessageService, ProcessMessageService>();
+                    services.AddScoped<IProcessMessage, ProcessMessageServiceHostedService>();
+
                 });
     }
 }

@@ -174,7 +174,7 @@
 
                 $.post("/home/SendMessage",{message},function (data) {
                     if (data.success) {
-                        $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer_start'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
+                        $("#chatBox").append("<div class='d-flex justify-content-end mb-4'><div class='msg_cotainer_send'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
                         $("#message").val('');
                     } else {
                         console.log("Message Not sent");

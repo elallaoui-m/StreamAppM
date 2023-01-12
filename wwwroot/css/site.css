@@ -1,0 +1,129 @@
+﻿body, html {
+    height: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    background: rgba(0,0,0,.05);
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+.chat {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.card {
+    height: 700px;
+    border-radius: 15px !important;
+}
+    .card.home {
+        height:auto;
+    }
+
+.type_msg.home {
+   border: 1px solid rgba(0,0,0,.1) !important
+}
+
+
+.msg_card_body {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+
+.card-footer {
+    border-radius: 0 0 15px 15px !important;
+    border-top: 0 !important;
+}
+
+.container {
+    align-content: center;
+}
+
+
+
+.type_msg {
+    border: 0 !important;
+    height: 60px !important;
+    overflow-y: auto;
+    transition:all .2s ease-in-out;
+}
+
+    .type_msg:focus {
+        box-shadow:0 0 10px rgba(0,0,0,.1);
+        outline: 0px !important;
+    }
+
+.send_btn {
+    border-radius: 0 15px 15px 0 !important;
+    background-color: rgba(0,0,0,0.3) !important;
+    border: 0 !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+
+
+
+.msg_cotainer {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    background-color: #0076ff;
+    color: white;
+    padding: 10px 15px;
+    position: relative;
+}
+
+.msg_cotainer_send {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 10px;
+    background-color: rgba(0,0,0,.2);
+    padding: 10px 15px;
+    position: relative;
+}
+
+.msg_time { 
+    position: absolute;
+    left: 0;
+    top: -20px;
+    color: rgba(0,0,0,0.5);
+    font-size: 10px;
+    width: 200%;
+}
+    .msg_time b {
+        font-size: 12px;
+    }
+
+    .msg_head {
+        position: relative;
+    }
+
+#action_menu_btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+}

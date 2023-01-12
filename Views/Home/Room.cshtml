@@ -1,0 +1,206 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container-fluid h-100 mt-5">
+    <div class="row justify-content-center h-100">
+        <div class="col-md-10 col-xl-9 col-sm-12 chat">
+            <a class="btn btn-danger w-100" asp-area="" asp-controller="Home" asp-action="Logout">Leave Room</a><br /><br />
+            <div class="card pt-4">
+                <div class="card-body msg_card_body" id="chatBox">
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            Hi, how are you samim?
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Hi Khalid i am good tnx how about you?
+                            <span class="msg_time"><b>Me</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            I am good too, thank you for your chat template
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            You are welcome
+                            <span class="msg_time"><b>Me</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            I am looking for your next templates
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Ok, thank you have a good day
+                            <span class="msg_time"><b>Me</b>&nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            I am looking for your next templates
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Ok, thank you have a good day
+                            <span class="msg_time"><b>Me</b>&nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            I am looking for your next templates
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Ok, thank you have a good day
+                            <span class="msg_time"><b>Me</b>&nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            I am looking for your next templates
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Ok, thank you have a good day
+                            <span class="msg_time"><b>Me</b>&nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            I am looking for your next templates
+                            <span class="msg_time"><b>Oussidi1998</b> &nbsp;&nbsp;8:40 AM, Today</span>
+
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Ok, thank you have a good day
+                            <span class="msg_time"><b>Me</b>&nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            Bye, see you
+                            <span class="msg_time"><b>Oussidi1998</b>&nbsp;&nbsp;8:40 AM, Today</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input name="" class="form-control type_msg" id="message" placeholder="Type your message..." />
+                        <div class="input-group-append">
+                            <button style="border:none">
+                                <span class="input-group-text send_btn" id="sendButton"><i class="fas fa-location-arrow"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    (function () {
+        var webSocketProtocol = location.protocol == "https:" ? "wss:" : "ws:";
+        var webSocketURI = webSocketProtocol + "//" + location.host + "/ws";
+        console.log(webSocketURI);
+        socket = new WebSocket(webSocketURI);
+
+        socket.onopen = function () {
+            console.log("Connected.");
+        };
+
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log('Disconnected.');
+            } else {
+                console.log('Connection lost.'); // for example if server processes is killed
+            }
+            console.log('Code: ' + event.code + '. Reason: ' + event.reason);
+        };
+
+        socket.onmessage = function (event) {
+            console.log("Data received: " );
+            console.log(event);
+            let data = JSON.parse(event.data);
+            $("#chatBox").append("<div class='d-flex justify-content-start mb-4'><div class='msg_cotainer'>" + data.content + "<span class='msg_time'><b>" + data.sender + "</b>&nbsp;&nbsp;" + data.timestamp+"</span></div></div>")
+
+
+        };
+
+        socket.onerror = function (error) {
+            console.log("Error: " + error.message);
+        };
+    })()  
+
+    $(function () {
+
+        // need function to load sockets
+
+        $("#sendButton").on("click", function () {
+
+            var message = $("#message").val();
+            var isValid = true;
+            if (!message) {
+                isValid = false;
+            }
+
+            if (isValid) {
+
+                $.post("/home/SendMessage",{message},function (data) {
+                    if (data.success) {
+                        $("#chatBox").append("<div class='d-flex justify-content-end mb-4'><div class='msg_cotainer_send'>" + message + "<span class='msg_time'><b>" + getCookie("username") + "</b>&nbsp;&nbsp;now</span></div></div>")
+                        $("#message").val('');
+                    } else {
+                        console.log("Message Not sent");
+                    }
+                });
+
+            }
+
+            return false;
+        })
+    })
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+ 
+</script>

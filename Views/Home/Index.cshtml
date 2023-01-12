@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="container-fluid h-100 mt-5">
+    <div class="row justify-content-center h-100">
+        <div class="col-md-10 col-xl-9 col-sm-12 chat">
+            <div class="home card p-4">
+
+                <div class="card-body">
+                    <h3 class="text-center">Welcome to the chat room</h3>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-10 col-lg-8">
+                        <div class="input-group mb-5">
+                            <input name="username" id="username" class="form-control type_msg home" placeholder="Username" /><br>
+                           <span id="error" class="w-100 text-danger"></span>
+                        </div>
+                        <div class="input-group mb-5">
+                            <button type="submit" id="loginButton" class="btn btn-primary w-100">Join Room</button>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(function () {
+    
+            $("#loginButton").on("click", function () {
+                console.log("enter clicked");
+                var username = $("#username").val();
+
+                var isValid = true;
+                if (!username) {
+                   // must create a div to show error
+                    isValid = false;
+                } else if (username.length < 4) {
+                    // must create a div to show error
+                    isValid = false;
+                }
+
+                if (isValid) {
+
+                    $(this).attr("disabled", true);
+                    $.post("/home/index", { username }, function (data) {
+
+                        if (data.success) {
+                            window.location.href = "/home/room";
+                        } else {
+                            $("#loginButton").attr("disabled", false);
+                            $("#error").text("Server In Error");
+                        }
+
+                    })
+
+                } else {
+                   $("#error").text("Please provide a username");
+                }
+
+                return false;
+            })
+        })
+</script>
